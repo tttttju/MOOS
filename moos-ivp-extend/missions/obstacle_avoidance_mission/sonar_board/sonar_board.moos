@@ -1,0 +1,226 @@
+ServerHost = localhost
+ServerPort = 9050
+Community  = sonar_board
+
+MOOSTimeWarp = 1
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 200
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pShare          @ NewConsole = false ~ pShare_sonar_board
+  //Run = pLogger         @ NewConsole = false
+
+  Run = pNodeReporter   @ NewConsole = false
+
+  // pSonarImageDetection_tradition or pSonarImageDetection_simulation or pSonarImageDetection_rknn
+  Run = pSonarImageDetection @ NewConsole = false, ~ pSonarImageDetection_simulation, ExtraProcessParams=SonarImageDetectionParams
+  // log_channel:  0:console,  1:to file *.log  2:both
+  // log_level:  0:trace 1:debug 2:info 3:warn 4:err 5:critical 6:off
+  SonarImageDetectionParams=--log_channel=1,--log_level=0,--log_dir=/home/crintek/moos_log/app/pSonarImageDetection
+}
+
+//---------------------------------------------------------
+// pShare Config Block  (Created from Plugin)
+
+ProcessConfig = pShare_sonar_board
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  input = route=localhost:9051
+
+  output = src_name=uSID_gridMap_st, route=localhost:9001
+  output = src_name=uSID_obstacleList_st, route=localhost:9001
+  output = src_name=uSID_sonarImage_st, route=localhost:9001
+  output = src_name=uBehavior_wayPoint_update, route=localhost:9001
+  output = src_name=GIVEN_OBSTACLE, route=localhost:9001
+  output = src_name=uCTF_auvInfo_req, route=localhost:9001
+  output = src_name=uCTF_staticTransform_req, route=localhost:9001
+  
+  
+
+  output = src_name=VIEW_*, route=localhost:9031
+  output = src_name=NODE_REPORT, route=localhost:9031
+  output = src_name=NODE_REPORT_LOCAL, route=localhost:9031
+  output = src_name=APPCAST*, route=localhost:9031
+  output = src_name=REALMCAST*, route=localhost:9031
+
+  // =======================================================
+  // Usage Info below
+  // =======================================================
+
+  // Simple forward of X to A on channel 89001
+
+  //output = src_name=Y, dest_name=B, route=localhost:9300
+ 
+  // Simple forward of Z to Z on a named address (no renaming)
+  // output = src_name = Z, route = oceanai.mit.edu:9020
+ 
+  // Setting up an input
+  // input = route = multicast_9
+  
+  //input = route = localhost:$(SHARE_LISTEN) & multicast_9
+
+ 
+  // Setting up lots of inputs at once
+  // input = route = "localhost:9069 & multicast_19 & multicast_65"
+}
+
+//------------------------------------------
+// pLogger config block
+
+ProcessConfig = pLogger
+{
+  AppTick   = 8
+  CommsTick = 8
+
+  AsyncLog = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = OBAVOID_COMPLETED @ 0 NOSYNC
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+  Log = BHV_WARNING @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+}
+
+//------------------------------------------
+// pNodeReporter config block
+
+ProcessConfig = pNodeReporter
+{
+  AppTick    = 2
+  CommsTick	 = 2
+
+  platform_type    = auv // kayak
+  platform_length  = 30.0 // 8
+  platform_color   = red
+}
+
+//------------------------------------------
+// pSonarImageDetection_tradition config block
+
+ProcessConfig = pSonarImageDetection_tradition
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  // sonar image info
+  sonar_image_width = 1920
+  sonar_image_height = 1080
+  sonar_image_opencv_format_type = CV_8UC3 //  CV_8UC3 or CV_8UC1
+  sonar_sensor_position_x = 960
+  sonar_sensor_position_y = 1080
+  sonar_max_detection_distance = 500.0
+  sonar_min_detection_distance = 0.5
+  sonar_image_v_meters_per_pixel = 0.490 // m/pixel
+  sonar_image_h_meters_per_pixel = 0.518 // m/pixel
+  sonar_sensor_h_field_angle = 134.0        // degree
+
+  // detect algorithm config
+  enable_smoothing_and_filtering = true
+  smooth_and_filter_method = MEDIAN_BLUR     // BOX or BLUR or GAUSSIAN_BLUR or BILATERAL or MEDIAN_BLUR
+  enable_image_binary_low_high_threshold = false
+  image_binary_threshold_low = 100.0
+  image_binary_threshold_high = 150.0
+  image_binary_threshold = 150.0
+  obstacle_contour_point_count_threshold = 1
+  morphology_ex_close_operation_kernel_size = 32
+  enable_obstacle_centroid = true
+  enable_obstacle_bounding_rect = true
+  enable_obstacle_bounding_circle = true
+  enable_occupied_grid_map = true
+  enable_obstacle_merge_by_distance = true
+  obstacle_merge_distance_threshold = 100 // pixel
+  enable_obstacle_merge_by_projection = true
+  obstacle_merge_projection_distance_threshold = 300 //pixel
+  enable_obstacle_tracking = true
+  tracking_object_max_frame_buffer_count = 30
+  flash_object_filter_time_thres_ms = 500
+  enable_suppress_large_scale_noise = true
+
+  test_sonar_video_file_name = /disk/work/moos_ws/moos-ivp-extend/src/pSonarImageDetection/tests/rizhao_yuwang222.mp4
+}
+
+ProcessConfig = pSonarImageDetection_simulation
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  // sonar image info
+  sonar_image_width = 1920
+  sonar_image_height = 1080
+  sonar_image_opencv_format_type = CV_8UC3 //  CV_8UC3 or CV_8UC1
+  sonar_sensor_position_x = 960
+  sonar_sensor_position_y = 1080
+  sonar_max_detection_distance = 500.0
+  sonar_min_detection_distance = 0.5
+  sonar_image_v_meters_per_pixel = 0.490 // m/pixel
+  sonar_image_h_meters_per_pixel = 0.518 // m/pixel
+  sonar_sensor_h_field_angle = 134.0        // degree
+
+  // detect algorithm config
+  enable_obstacle_centroid = true
+  enable_obstacle_bounding_rect = true
+  enable_obstacle_bounding_circle = true
+  enable_occupied_grid_map = true
+  enable_obstacle_merge_by_distance = true
+  obstacle_merge_distance_threshold = 100 // pixel
+  enable_obstacle_merge_by_projection = true
+  obstacle_merge_projection_distance_threshold = 300 //pixel
+  enable_obstacle_tracking = true
+  tracking_object_max_frame_buffer_count = 30
+  flash_object_filter_time_thres_ms = 500
+  enable_suppress_large_scale_noise = true
+}
+
+ProcessConfig = pSonarImageDetection_rknn
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  // sonar image info
+  sonar_image_width = 1920
+  sonar_image_height = 1080
+  sonar_image_opencv_format_type = CV_8UC3 //  CV_8UC3 or CV_8UC1
+  sonar_sensor_position_x = 960
+  sonar_sensor_position_y = 1080
+  sonar_max_detection_distance = 500.0
+  sonar_min_detection_distance = 0.5
+  sonar_image_v_meters_per_pixel = 0.490 // m/pixel
+  sonar_image_h_meters_per_pixel = 0.518 // m/pixel
+  sonar_sensor_h_field_angle = 134.0        // degree
+
+  // detect algorithm config
+  rknn_model_path = /disk/work/moos_ws/moos-ivp-extend/src/lib_common_packages_qrbzn/lib_sonar_image_detector/platform/rknn/sid_yolo11n_20250219_i8.rknn
+  rknn_object_class_number = 2
+  rknn_nms_threshold = 0.45
+  rknn_box_conf_threshold =  0.25
+
+  enable_obstacle_centroid = true
+  enable_obstacle_bounding_rect = true
+  enable_obstacle_bounding_circle = true
+  enable_occupied_grid_map = true
+  enable_obstacle_merge_by_distance = true
+  obstacle_merge_distance_threshold = 100 // pixel
+  enable_obstacle_merge_by_projection = true
+  obstacle_merge_projection_distance_threshold = 300 //pixel
+  enable_obstacle_tracking = true
+  tracking_object_max_frame_buffer_count = 30
+  flash_object_filter_time_thres_ms = 500
+  enable_suppress_large_scale_noise = true
+
+  test_sonar_video_file_name =/disk/work/moos_ws/moos-ivp-extend/src/pSonarImageDetection/tests/rizhao_yuwang222.mp4
+}

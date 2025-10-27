@@ -1,0 +1,237 @@
+Compiler flags: -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -pedantic -fPIC -Wno-psabi  -Os  
+Built files will be placed into these directories: 
+  Intermediate build files: /Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/build/ivp         
+  Libraries:                /Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/lib         
+  Programs:                 /Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/bin         
+BUILD_GUI_CODE = ON 
+Invoking cmake...
+BUILD_BOT_CODE_ONLY: OFF   
+CMake Deprecation Warning at CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
++++++++++++++++++++++++++++++++++++++++++
+FIND_PACKAGE CONSIDERED:/usr/local/lib/cmake/MOOS/MOOSConfig.cmake
++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++
+MOOS_INCLUDE_DIRS:/usr/local/lib/cmake/MOOS/../../../include
+MOOS_LIBRARIES:   MOOS::MOOS
++++++++++++++++++++++++++++++++++++++++++
+-- CMake is running /Users/aka/moos-ivp/build/MOOS/MOOSGeodesy/UseMOOSGeodesy.cmake
++++++++++++++++++++++++++++++++++++++++++
+MOOSGeodesy_INCLUDE_DIRS:/Users/aka/moos-ivp/MOOS/MOOSGeodesy/libMOOSGeodesy/include
+MOOSGeodesy_LIBRARY_PATH:
++++++++++++++++++++++++++++++++++++++++++
+----------------------------------------Use UTM:ON
+-- Detected use of 'Homebrew' for dependencies
++++++++++++++++++++++++++++++++++++++++++
+IVP_LIB_DIRECTORY:/Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/lib
+IVP_INC_DIRECTORY:/Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/include
+IVP_BIN_DIRECTORY:/Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/bin
++++++++++++++++++++++++++++++++++++++++++
+ IVP_NON_GUI_LIBS: lib_behaviors;lib_bhvutil;lib_behaviors-marine;lib_genutil;lib_geometry;lib_behaviors-colregs;lib_polar;lib_helmivp;lib_ivpbuild;lib_ivpsolve;lib_logic;lib_ivpcore;lib_evalutil;lib_encounters;lib_apputil;lib_contacts;lib_obstacles;lib_realm;lib_ufield;lib_logutils;lib_mbutil;lib_manifest;lib_marine_pid;lib_turngeo;lib_geodaid;lib_survey;lib_dep_behaviors
+ IVP_GUI_LIBS: lib_ipfview;lib_marineview;lib_zaicview;lib_ucommand
+ ROBOT_APPS: app_alogpick;app_nzero;app_projpt;app_alogbin;app_alogavg;app_alogtm;app_alogeval;app_alogload;app_aloggrep;app_alogscan;app_alogcd;app_alogpare;app_alogeplot;app_alogrm;app_alogiter;app_alogcat;app_alogclip;app_aloghelm;app_nsplug;app_pickpos;app_manifest_test;app_tagrep;app_gen_moos_app;app_alogmhash;pRealm;pEchoVar;pHelmIvP;pDeadManPost;pNodeReporter;pObstacleMgr;uFldNodeBroker;uHelmScope;uFldMessageHandler;uTimerScript;uProcessWatch;uMemWatch;uLoadWatch;uTermCommand;uXMS;uMAC;uPokeDB;uQueryDB;pHostInfo;iSay;pContactMgrV20;pMarinePIDV22;uSimMarineV22;uSimMarineV23;pMissionHash;pMissionEval;iBlinkStick;pAutoPoke;uMayFinish;app_pluck;app_nspatch
+ IVP_NON_GUI_APPS: app_alogsplit;app_alogsort;app_alogcheck;app_alogtest;app_gen_obstacles;app_bhv2graphviz;pXRelay;uFldCollObDetect;uFldCollisionDetect;uFldPathCheck;uFldShoreBroker;uFldObstacleSim;uFldScope;uFldNodeComms;uFldBeaconRangeSensor;pSearchGrid;uFldGenericSensor;uFldContactRangeSensor;uFldDelve;app_bweb;app_mhash_gen;app_projfield;pMapMarkers;pSpoofNode
+ IVP_GUI_APPS: app_ffview;app_geoview;app_alogview;app_zaic_hleq;app_zaic_vect;app_zaic_hdg;app_zaic_spd;app_zaic_peak;pMarineViewer;uFunctionVis;uMACView;uPlotViewer;uCommand
+ IVP_NON_GUI_APPS_DEP: dep_pBasicContactMgr;dep_uSimMarine;dep_pMarinePID
++++++++++++++++++++++++++++++++++++++++++
+ IVP_BUILD_BOT_CODE_ONLY: OFF
++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++
+IVP_GUI_CODE will be built......         
++++++++++++++++++++++++++++++++++++++++++
+IVP_LIBS_TO_BUILD: lib_behaviors;lib_bhvutil;lib_behaviors-marine;lib_genutil;lib_geometry;lib_behaviors-colregs;lib_polar;lib_helmivp;lib_ivpbuild;lib_ivpsolve;lib_logic;lib_ivpcore;lib_evalutil;lib_encounters;lib_apputil;lib_contacts;lib_obstacles;lib_realm;lib_ufield;lib_logutils;lib_mbutil;lib_manifest;lib_marine_pid;lib_turngeo;lib_geodaid;lib_survey;lib_dep_behaviors;lib_ipfview;lib_marineview;lib_zaicview;lib_ucommand
+Include directory: /Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/include
+-- Configuring done (0.6s)
+-- Generating done (4.4s)
+-- Build files have been written to: /Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/build/ivp
+Invoking make -j4 -j2
+./build-ivp.sh: line 198: /Users/aka/.moos-ivp-args: Operation not permitted
+./build-ivp.sh: line 199: /Users/aka/.moos-ivp-args: Operation not permitted
+./build-ivp.sh: line 200: /Users/aka/.moos-ivp-args: Operation not permitted
+./build-ivp.sh: line 201: /Users/aka/.moos-ivp-args: Operation not permitted
+./build-ivp.sh: line 202: /Users/aka/.moos-ivp-args: Operation not permitted
+./build-ivp.sh: line 203: /Users/aka/.moos-ivp-args: Operation not permitted
+./build-ivp.sh: line 204: /Users/aka/.moos-ivp-args: Operation not permitted
+./build-ivp.sh: line 205: /Users/aka/.moos-ivp-args: Operation not permitted
+./build-ivp.sh: line 206: /Users/aka/.moos-ivp-args: Operation not permitted
+[  1%] Built target behaviors
+[  4%] Built target bhvutil
+[  7%] Built target mbutil
+[  9%] Built target helmivp
+[  9%] Built target genutil
+[ 10%] Built target polar
+[ 11%] Built target ivpcore
+[ 12%] Built target ivpsolve
+[ 13%] Built target logic
+[ 14%] Built target evalutil
+[ 14%] Built target encounters
+[ 14%] Built target apputil
+[ 15%] Built target contacts
+[ 15%] Built target obstacles
+[ 16%] Built target realm
+[ 16%] Built target ufield
+[ 17%] Built target manifest
+[ 18%] Built target marine_pid
+[ 21%] Built target logutils
+[ 22%] Built target turngeo
+[ 22%] Built target geodaid
+[ 22%] Built target survey
+[ 24%] Built target ipfview
+[ 25%] Built target marineview
+[ 26%] Built target zaicview
+[ 27%] Built target ucommand
+[ 28%] Built target alogpick
+[ 28%] Built target alogbin
+[ 28%] Built target alogavg
+[ 29%] Built target alogtm
+[ 29%] Built target aloggrep
+[ 29%] Built target alogscan
+[ 29%] Built target alogcd
+[ 29%] Built target alogpare
+[ 30%] Built target alogeplot
+[ 30%] Built target alogrm
+[ 30%] Built target alogiter
+[ 31%] Built target alogcat
+[ 31%] Built target alogclip
+[ 32%] Built target nsplug
+[ 32%] Built target manifest_test
+[ 32%] Built target tagrep
+[ 32%] Built target gen_moos_app
+[ 33%] Built target alogmhash
+[ 34%] Built target pRealm
+[ 35%] Built target pDeadManPost
+[ 36%] Built target uFldNodeBroker
+[ 36%] Built target uFldMessageHandler
+[ 37%] Built target uMemWatch
+[ 38%] Built target uProcessWatch
+[ 38%] Built target uLoadWatch
+[ 39%] Built target uTermCommand
+[ 40%] Built target uXMS
+[ 41%] Built target uMAC
+[ 42%] Built target uPokeDB
+[ 42%] Built target uQueryDB
+[ 43%] Built target pHostInfo
+[ 43%] Built target iSay
+[ 43%] Built target pMissionHash
+[ 44%] Built target pMissionEval
+[ 45%] Built target iBlinkStick
+[ 46%] Built target pAutoPoke
+[ 46%] Built target uMayFinish
+[ 46%] Built target pluck
+[ 47%] Built target nspatch
+[ 47%] Built target alogsplit
+[ 48%] Built target alogsort
+[ 49%] Built target alogcheck
+[ 49%] Built target alogtest
+[ 49%] Built target pXRelay
+[ 49%] Built target uFldShoreBroker
+[ 50%] Built target uFldScope
+[ 50%] Built target uFldDelve
+[ 50%] Built target bweb
+[ 50%] Built target mhash_gen
+[ 50%] Built target uPlotViewer
+[ 50%] Built target uCommand
+[ 60%] Built target geometry
+[ 62%] Built target behaviors-colregs
+[ 67%] Built target behaviors-marine
+[ 71%] Built target ivpbuild
+[ 72%] Built target nzero
+[ 72%] Built target dep_behaviors
+[ 73%] Built target projpt
+[ 73%] Built target alogeval
+[ 73%] Building CXX object app_alogload/CMakeFiles/alogload.dir/main.cpp.o
+[ 73%] Building CXX object app_aloghelm/CMakeFiles/aloghelm.dir/main.cpp.o
+[ 73%] Building CXX object app_alogload/CMakeFiles/alogload.dir/LoadReporter.cpp.o
+[ 74%] Building CXX object app_aloghelm/CMakeFiles/aloghelm.dir/HelmReporter.cpp.o
+[ 74%] Linking CXX executable /Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/bin/alogload
+[ 74%] Built target alogload
+[ 75%] Built target pickpos
+[ 76%] Built target pEchoVar
+[ 76%] Building CXX object pHelmIvP/CMakeFiles/pHelmIvP.dir/HelmIvP.cpp.o
+[ 76%] Linking CXX executable /Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/bin/aloghelm
+[ 76%] Built target aloghelm
+[ 76%] Building CXX object pHelmIvP/CMakeFiles/pHelmIvP.dir/HelmEngine.cpp.o
+/Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/ivp/src/pHelmIvP/HelmIvP.cpp:330:43: error: use of undeclared identifier 'commsPolicy'
+  m_info_buffer->setValue("COMMS_POLICY", commsPolicy(), m_curr_time);
+                                          ^
+/Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/ivp/src/pHelmIvP/HelmIvP.cpp:726:35: error: use of undeclared identifier 'commsPolicy'
+  m_msgs << "  Comms Policy: " << commsPolicy()  << endl; 
+                                  ^
+2 errors generated.
+make[2]: *** [pHelmIvP/CMakeFiles/pHelmIvP.dir/HelmIvP.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 77%] Built target pNodeReporter
+[ 77%] Built target pObstacleMgr
+[ 77%] Building CXX object uHelmScope/CMakeFiles/uHelmScope.dir/HelmScope.cpp.o
+make[1]: *** [pHelmIvP/CMakeFiles/pHelmIvP.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 78%] Building CXX object uHelmScope/CMakeFiles/uHelmScope.dir/BehaviorRecord.cpp.o
+[ 78%] Building CXX object uHelmScope/CMakeFiles/uHelmScope.dir/HelmScope_Info.cpp.o
+[ 78%] Building CXX object uHelmScope/CMakeFiles/uHelmScope.dir/main.cpp.o
+[ 78%] Linking CXX executable /Users/aka/Desktop/sourcecode/moos/MyMoos/moos-ivp/bin/uHelmScope
+ld: warning: object file (/usr/local/lib/libMOOS.a(Event.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(Mutex.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(Timestamp.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(Exception.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(AtomicCounter.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(Bugcheck.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(Debugger.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(AppCastingMOOSApp.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(AppCastingMOOSInstrument.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(AppCast.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSException.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSLock.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSFileReader.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSUtilityFunctions.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ProcessConfigReader.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSLinuxSerialPort.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSSerialPort.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(IPV4Address.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(KeyboardCapture.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ThreadPrint.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(CommandLineParser.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ProcInfo.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MemInfo.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ThreadPriority.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(PeriodicEvent.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ConsoleColours.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(CommsTools.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSVariable.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSCommClient.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSAsyncCommClient.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ClientCommsStatus.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSCommObject.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSCommPkt.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSCommServer.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ThreadedCommServer.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSMsg.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSSkewFilter.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(XPCGetHostInfo.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(XPCGetProtocol.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(XPCSocket.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(XPCTcpSocket.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(XPCUdpSocket.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ServerAudit.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(ActiveMailQueue.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MessageQueueAccumulator.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(SuicidalSleeper.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MulticastNode.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(EndToEndAudit.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSApp.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSInstrument.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSDB.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSDBVar.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSRegisterInfo.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MsgFilter.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(HTTPConnection.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSDBHTTPServer.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+ld: warning: object file (/usr/local/lib/libMOOS.a(MOOSDBLogger.cpp.o)) was built for newer macOS version (12.7) than being linked (12.0)
+[ 78%] Built target uHelmScope
+make: *** [all] Error 2

@@ -1,0 +1,433 @@
+//-------------------------------------------------
+// NAME: M. Benjamin, MIT CSAIL
+// FILE: alpha.moos
+//-------------------------------------------------
+
+ServerHost = localhost		
+ServerPort = 9000
+Community  = alpha
+
+MOOSTimeWarp = 1
+
+// Forest Lake
+//LatOrigin  = 43.825300 
+//LongOrigin = -70.330400 
+
+// MIT Sailing Pavilion (use this one)
+LatOrigin  = 42.358456 
+LongOrigin = -71.087589
+
+
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 200
+
+  Run = MOOSDB          @ NewConsole = false
+  //Run = pLogger         @ NewConsole = false
+  Run = uSimMarine      @ NewConsole = false
+  Run = pMarinePID      @ NewConsole = false
+  Run = pHelmIvP        @ NewConsole = false
+  Run = pMarineViewer   @ NewConsole = false
+  Run = uProcessWatch   @ NewConsole = false
+  Run = pNodeReporter   @ NewConsole = false
+  Run = pObstacleMgr    @ NewConsole = false
+  Run = uTimerScript    @ NewConsole = false
+  
+  Run = pAuvInfoServer    @ NewConsole = false, ExtraProcessParams=AuvInfoServerParams
+  // log_channel:  0:console,  1:to file *.log  2:both
+  // log_level:  0:trace 1:debug 2:info 3:warn 4:err 5:critical 6:off
+  AuvInfoServerParams=--log_channel=1,--log_level=0,--log_dir=/home/crintek/moos_log/app/pAuvInfoServer
+
+  Run = pLocalPathPlanner @ NewConsole = false,XConfig=3,ExtraProcessParams=LocalPathPlannerParams
+  // log_channel:  0:console,  1:to file *.log  2:both
+  // log_level:  0:trace 1:debug 2:info 3:warn 4:err 5:critical 6:off
+  LocalPathPlannerParams=--log_channel=1,--log_level=0,--log_dir=/home/crintek/moos_log/app/pLocalPathPlanner
+
+  //Run = pLocalPathPlanner_test    @ NewConsole = true
+  
+  // pSonarImageDetection_tradition or pSonarImageDetection_simulation or pSonarImageDetection_rknn
+  Run = pSonarImageDetection @ NewConsole = false, ~ pSonarImageDetection_simulation, ExtraProcessParams=SonarImageDetectionParams
+  // log_channel:  0:console,  1:to file *.log  2:both
+  // log_level:  0:trace 1:debug 2:info 3:warn 4:err 5:critical 6:off
+  SonarImageDetectionParams=--log_channel=1,--log_level=0,--log_dir=/home/crintek/moos_log/app/pSonarImageDetection
+}
+
+//------------------------------------------
+ProcessConfig = pObstacleMgr
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  max_pts_per_cluster = 50
+  max_age_per_point = 60
+  alert_range = 35
+
+  ignore_range = 40
+  lasso = true
+  lasso_radius = 6
+  lasso_points = 8
+}
+
+//------------------------------------------
+ProcessConfig = uTimerScript                                    
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+  
+  delay_start = 1                                        
+  reset_max   = 4000
+  reset_time  = all-posted
+
+  event       = var=uBehavior_wayPoint_update, val="points=-900,800 : -900,-1200 : 1000,-1200 : 1000,900 : 800,1000", time=2.6
+}                                                               
+
+//------------------------------------------
+// uProcessWatch config block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  summary_wait = 5
+
+  nowatch   = uXMS*
+  nowatch   = uMAC*
+  nowatch   = uPokeDB*
+  nowatch   = uTermCommand*
+  watch_all = true
+}
+
+
+//------------------------------------------
+// pLogger config block
+
+ProcessConfig = pLogger
+{
+  AppTick   = 8
+  CommsTick = 8
+
+  AsyncLog = true
+
+  // For variables that are published in a bundle on their first post,
+  // explicitly declare their logging request
+
+  Log = OBAVOID_COMPLETED @ 0 NOSYNC
+  Log = IVPHELM_LIFE_EVENT @ 0 NOSYNC
+  Log = BHV_WARNING @ 0 NOSYNC
+
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardExclusionLog = true
+}
+
+//------------------------------------------
+// uSimMarine config block
+
+ProcessConfig = uSimMarine
+{
+  AppTick	= 4
+  CommsTick	= 4
+
+  start_x       = -1000
+  start_y       = 1000
+  start_heading = 90
+  start_speed   = 0
+	max_deceleration = 0.1
+  prefix        = NAV
+
+  turn_rate     = 40
+  thrust_map    = 0:0, 20:1, 40:2, 60:3, 80:4, 100:5
+	thrust_reflect = true
+}
+
+//------------------------------------------
+// pHelmIvP config block
+
+ProcessConfig = pHelmIvP
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  term_report_interval=0
+
+  bhv_dir_not_found_ok = true
+  ivp_behavior_dir = /Users/ddmikerb
+
+  behaviors  = alpha.bhv
+  domain     = course:0:359:360
+  domain     = speed:0:4:21
+}
+
+//------------------------------------------
+// pMarinePID config block
+
+ProcessConfig = pMarinePID
+{
+  AppTick    = 20
+  CommsTick  = 20
+
+  verbose       = true
+  depth_control = false
+
+  // SIM_INSTABILITY = 20
+
+  // Yaw PID controller
+  yaw_pid_kp		 = 1.2
+  yaw_pid_kd		 = 0.0
+  yaw_pid_ki		 = 0.3
+  yaw_pid_integral_limit = 0.07
+
+  // Speed PID controller
+  speed_pid_kp		 = 1.0
+  speed_pid_kd		 = 0.0
+  speed_pid_ki		 = 0.0
+  speed_pid_integral_limit = 0.07
+
+  //MAXIMUMS
+  maxrudder    = 100
+  maxthrust    = 100
+
+  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
+  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
+  speed_factor = 20
+}
+
+//------------------------------------------
+// pMarineViewer config block
+
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  //tiff_file            = forrest19.tif
+  //tiff_file            = AerialMIT.tif
+  tiff_file              = forrest19_2.tif
+  auv_tiff_file          = auv_1.tif
+
+  set_pan_x            = -90
+  set_pan_y            = 80
+  zoom                 = 1.0
+
+  vehicle_shape_scale  = 1
+  hash_delta           = 50
+  hash_shade           = 0.4
+  hash_viewable        = false
+  
+  trails_viewable      = false
+  trails_point_size    = 1
+
+  // Appcast configuration
+  appcast_height       = 75
+  appcast_width        = 30
+  appcast_viewable     = true
+  appcast_color_scheme = indigo
+  nodes_font_size      = medium
+  procs_font_size      = medium
+  appcast_font_size    = small
+  vehicles_name_mode    = off
+  seglist_viewable_labels = false
+  point_viewable_labels = false
+  
+  //left_context[polyvert] = POLY_VERT=x=$(XPOS),y=$(YPOS)
+  //left_context[pt] = VIEW_POINT = x=$(XPOS),y=$(YPOS),event_type=$(EVENT_TYPE),label=pt$(IX),vertex_color=white
+  left_context[pt] = MOUSE_EVENT = x=$(XPOS),y=$(YPOS),event_type=$(EVENT_TYPE),label=pt$(IX),button=left
+  right_context[pt] = MOUSE_EVENT = x=$(XPOS),y=$(YPOS),event_type=$(EVENT_TYPE),label=pt$(IX),button=right
+	
+  scope  = DST_AVD_OBSTACLESC
+  scope  = RNG_AVD_OBSTACLESC
+  scope  = RNG_AVD_OBSTACLESA
+  scope  = POSE_KEEP
+  scope  = VIEW_POLYGON
+  scope  = VIEW_POINT
+	scope  = RETURN
+  scope  = WPT_STAT
+  scope  = VIEW_SEGLIST
+
+  button_one = DEPLOY # DEPLOY=true
+  button_one = MOOS_MANUAL_OVERRIDE=false # RETURN=false
+  button_two = RETURN # RETURN=true
+}
+
+//------------------------------------------
+// pNodeReporter config block
+
+ProcessConfig = pNodeReporter
+{
+  AppTick    = 2
+  CommsTick	 = 2
+
+  platform_type    = auv // kayak
+  platform_length  = 30.0 // 8
+  platform_color   = red
+}
+
+// pAuvInfoServer config block
+
+ProcessConfig = pAuvInfoServer
+{
+   AppTick   = 4
+   CommsTick = 4
+   
+   auv_info_file_path = /disk/work/moos_ws/moos-ivp-extend/src/pAuvInfoServer/config/auv_info.yaml
+   sensor_calibration_file_path = /disk/work/moos_ws/moos-ivp-extend/src/pAuvInfoServer/config/sensor_calibration.yaml
+}
+
+//------------------------------------------
+// pSonarImageDetection_tradition config block
+
+ProcessConfig = pSonarImageDetection_tradition
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  // sonar image info
+  sonar_image_width = 1920
+  sonar_image_height = 1080
+  sonar_image_opencv_format_type = CV_8UC3 //  CV_8UC3 or CV_8UC1
+  sonar_sensor_position_x = 960
+  sonar_sensor_position_y = 1080
+  sonar_max_detection_distance = 500.0
+  sonar_min_detection_distance = 0.5
+  sonar_image_v_meters_per_pixel = 0.490 // m/pixel
+  sonar_image_h_meters_per_pixel = 0.518 // m/pixel
+  sonar_sensor_h_field_angle = 134.0        // degree
+
+  // detect algorithm config
+  enable_smoothing_and_filtering = true
+  smooth_and_filter_method = MEDIAN_BLUR     // BOX or BLUR or GAUSSIAN_BLUR or BILATERAL or MEDIAN_BLUR
+  enable_image_binary_low_high_threshold = false
+  image_binary_threshold_low = 100.0
+  image_binary_threshold_high = 150.0
+  image_binary_threshold = 150.0
+  obstacle_contour_point_count_threshold = 1
+  morphology_ex_close_operation_kernel_size = 32
+  enable_obstacle_centroid = true
+  enable_obstacle_bounding_rect = true
+  enable_obstacle_bounding_circle = true
+  enable_occupied_grid_map = true
+  enable_obstacle_merge_by_distance = true
+  obstacle_merge_distance_threshold = 100 // pixel
+  enable_obstacle_merge_by_projection = true
+  obstacle_merge_projection_distance_threshold = 300 //pixel
+  enable_obstacle_tracking = true
+  tracking_object_max_frame_buffer_count = 30
+  flash_object_filter_time_thres_ms = 500
+  enable_suppress_large_scale_noise = true
+
+  test_sonar_video_file_name = /disk/work/moos_ws/moos-ivp-extend/src/pSonarImageDetection/tests/rizhao_yuwang222.mp4
+}
+
+ProcessConfig = pSonarImageDetection_simulation
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  // sonar image info
+  sonar_image_width = 1920
+  sonar_image_height = 1080
+  sonar_image_opencv_format_type = CV_8UC3 //  CV_8UC3 or CV_8UC1
+  sonar_sensor_position_x = 960
+  sonar_sensor_position_y = 1080
+  sonar_max_detection_distance = 500.0
+  sonar_min_detection_distance = 0.5
+  sonar_image_v_meters_per_pixel = 0.490 // m/pixel
+  sonar_image_h_meters_per_pixel = 0.518 // m/pixel
+  sonar_sensor_h_field_angle = 134.0        // degree
+
+  // detect algorithm config
+  enable_obstacle_centroid = true
+  enable_obstacle_bounding_rect = true
+  enable_obstacle_bounding_circle = true
+  enable_occupied_grid_map = true
+  enable_obstacle_merge_by_distance = true
+  obstacle_merge_distance_threshold = 100 // pixel
+  enable_obstacle_merge_by_projection = true
+  obstacle_merge_projection_distance_threshold = 300 //pixel
+  enable_obstacle_tracking = true
+  tracking_object_max_frame_buffer_count = 30
+  flash_object_filter_time_thres_ms = 500
+  enable_suppress_large_scale_noise = true
+}
+
+ProcessConfig = pSonarImageDetection_rknn
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  // sonar image info
+  sonar_image_width = 1920
+  sonar_image_height = 1080
+  sonar_image_opencv_format_type = CV_8UC3 //  CV_8UC3 or CV_8UC1
+  sonar_sensor_position_x = 960
+  sonar_sensor_position_y = 1080
+  sonar_max_detection_distance = 500.0
+  sonar_min_detection_distance = 0.5
+  sonar_image_v_meters_per_pixel = 0.490 // m/pixel
+  sonar_image_h_meters_per_pixel = 0.518 // m/pixel
+  sonar_sensor_h_field_angle = 134.0        // degree
+
+  // detect algorithm config
+  rknn_model_path = /disk/work/moos_ws/moos-ivp-extend/src/lib_common_packages_qrbzn/lib_sonar_image_detector/platform/rknn/sid_yolo11n_20250219_i8.rknn
+  rknn_object_class_number = 2
+  rknn_nms_threshold = 0.45
+  rknn_box_conf_threshold =  0.25
+
+  enable_obstacle_centroid = true
+  enable_obstacle_bounding_rect = true
+  enable_obstacle_bounding_circle = true
+  enable_occupied_grid_map = true
+  enable_obstacle_merge_by_distance = true
+  obstacle_merge_distance_threshold = 100 // pixel
+  enable_obstacle_merge_by_projection = true
+  obstacle_merge_projection_distance_threshold = 300 //pixel
+  enable_obstacle_tracking = true
+  tracking_object_max_frame_buffer_count = 30
+  flash_object_filter_time_thres_ms = 500
+  enable_suppress_large_scale_noise = true
+
+  test_sonar_video_file_name = /disk/work/moos_ws/moos-ivp-extend/src/pSonarImageDetection/tests/rizhao_yuwang222.mp4
+}
+
+//------------------------------------------
+ProcessConfig = pLocalPathPlanner
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  steering_angle = 7.13 // Note: make sure to keep the same value to the auv_max_steering_angle in auv_info.yaml
+  steering_angle_discrete_num = 1
+  segment_length = 60.0                 // [ auv_length*2. auv_length*3 ]
+  segment_length_discrete_num = 2     // step size: 30m,
+  steering_penalty = 1.5
+  steering_change_penalty = 2.0
+  shot_distance = 150.0 // turning_radius * 1 + 30
+  grid_size_phi = 72.0
+  max_iteration_count = 100 // times
+
+  emergency_stop_distance_thres = 100.0 // Un-used, Dynamic calculate by obstacle size
+  start_avoid_obstacle_distance_thres = 150.0 // Un-used, Dynamic calculate by obstacle size
+}
+
+//------------------------------------------
+ProcessConfig = pLocalPathPlanner_test
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  grid_map_png_file_path = /disk/work/moos_ws/moos-ivp-extend/src/pLocalPathPlanner/tests/grid_map_101x57_ob.png
+
+  test_waypoints       = 60,-40 : 60,-600 : 450,-620 : 380,-100 : 150,-40        //uBehavior_wayPoint_update
+  current_x       = 60
+  current_y       = -40
+  current_heading = 180
+  current_speed   = 2
+  current_depth   = 10
+}
+
