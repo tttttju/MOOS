@@ -368,6 +368,10 @@ int REPLAY_GUI::handle(int event)
 
 //----------------------------------------------------------
 // Procedure: setCurrTime()
+//   Purpose: Change the global replay time, drive all viewers to refresh,
+//            and update status readouts.
+//   作用：设置当前回放时间，触发导航视图、日志曲线以及状态栏
+//         的同步刷新，确保各窗口展示一致的时间点数据。
 
 void REPLAY_GUI::setCurrTime(double curr_time)
 {
@@ -538,6 +542,7 @@ void REPLAY_GUI::cb_JumpTime(Fl_Widget* o, int v) {
 
 //----------------------------------------- Step
 inline void REPLAY_GUI::cb_Step_i(int millisecs) {
+  // 作用：根据步进毫秒数更新当前回放时间，并在越界时自动停止流式播放。
   double dbl_val = (double)(millisecs) / 1000.0;
   bool time_in_bounds = np_viewer->stepTime(dbl_val);
   if(!time_in_bounds) {
@@ -571,6 +576,7 @@ void REPLAY_GUI::cb_StepType(Fl_Widget* o, int v) {
 
 //----------------------------------------- LeftLogPlot
 inline void REPLAY_GUI::cb_LeftLogPlot_i(int index) {
+  // 作用：根据菜单选择更新左侧日志曲线，并确保窗口可见。
   lp_viewer->setLeftPlot((unsigned int)(index));
   lp_viewer->showLeftLogPlot(true);
   lp_viewer->redraw();
@@ -583,6 +589,7 @@ void REPLAY_GUI::cb_LeftLogPlot(Fl_Widget* o, int v) {
 
 //----------------------------------------- RightLogPlot
 inline void REPLAY_GUI::cb_RightLogPlot_i(int index) {
+  // 作用：根据菜单选择更新右侧日志曲线，并确保窗口可见。
   lp_viewer->setRightPlot((unsigned int)(index));
   lp_viewer->showRightLogPlot(true);
   lp_viewer->redraw();
@@ -595,6 +602,7 @@ void REPLAY_GUI::cb_RightLogPlot(Fl_Widget* o, int v) {
 
 //----------------------------------------- cb_Encounter
 inline void REPLAY_GUI::cb_Encounter_i(int aix) {
+  // 作用：按车辆索引构造相遇分析窗口，聚焦当前时间点。
   string vname = m_dbroker.getVNameFromAix(aix);
   if(vname == "")
     return;
@@ -616,6 +624,7 @@ void REPLAY_GUI::cb_Encounter(Fl_Widget* o, int v) {
 
 //----------------------------------------- cb_VarHist
 inline void REPLAY_GUI::cb_VarHist_i(int mix) {
+  // 作用：按索引创建变量历史窗口，并传入当前时间进行对齐。
   string vname = m_dbroker.getVNameFromMix(mix);
   string varname = m_dbroker.getVarNameFromMix(mix);
   if((vname == "") || (varname == ""))
@@ -638,6 +647,7 @@ void REPLAY_GUI::cb_VarHist(Fl_Widget* o, int v) {
 
 //----------------------------------------- cb_AppLog
 inline void REPLAY_GUI::cb_AppLog_i(int alix) {
+  // 作用：打开应用日志窗口，聚焦指定平台与应用的日志记录。
   string vname    = m_dbroker.getVNameFromALix(alix);
   string app_name = m_dbroker.getAppNameFromALix(alix);
   if((vname == "") || (app_name == ""))
@@ -662,6 +672,7 @@ void REPLAY_GUI::cb_AppLog(Fl_Widget* o, int v) {
 
 //----------------------------------------- cb_TaskDiary
 inline void REPLAY_GUI::cb_TaskDiary_i() {
+  // 作用：打开任务日记窗口，并同步当前播放时间。
 
   double curr_time = np_viewer->getCurrTime();
   string title = "Task Diary (All Vehicles)";
@@ -679,6 +690,7 @@ void REPLAY_GUI::cb_TaskDiary(Fl_Widget* o) {
 
 //----------------------------------------- cb_IPF_GUI
 inline void REPLAY_GUI::cb_IPF_GUI_i(int aix) {
+  // 作用：打开 IPF 视图并应用行为-变量映射，辅助调试行为函数。
   string vname = m_dbroker.getVNameFromAix(aix);
   if(vname == "")
     return;
@@ -701,6 +713,7 @@ void REPLAY_GUI::cb_IPF_GUI(Fl_Widget* o, int v) {
 
 //----------------------------------------- cb_Helm_GUI
 inline void REPLAY_GUI::cb_Helm_GUI_i(int aix) {
+  // 作用：打开 HelmScope 子窗口，查看特定决策器的执行轨迹。
   string vname = m_dbroker.getVNameFromAix(aix);
   if(vname == "")
     return;
@@ -723,6 +736,7 @@ void REPLAY_GUI::cb_Helm_GUI(Fl_Widget* o, int v) {
 
 //----------------------------------------- TimeZoom
 inline void REPLAY_GUI::cb_TimeZoom_i(int val) {
+  // 作用：根据按钮输入缩放日志时间轴，便于精细浏览或快速回顾。
   if(val > 0)
     lp_viewer->adjustZoom("in");
   else if(val < 0)
@@ -740,6 +754,7 @@ void REPLAY_GUI::cb_TimeZoom(Fl_Widget* o, int v) {
 
 //----------------------------------------- ToggleSyncScales
 inline void REPLAY_GUI::cb_ToggleSyncScales_i(int val) {
+  // 作用：切换左右日志曲线是否同步缩放，便于对比不同变量。
   lp_viewer->setSyncScales("toggle");
   updateXY();
 }
@@ -751,6 +766,7 @@ void REPLAY_GUI::cb_ToggleSyncScales(Fl_Widget* o, int v) {
 
 //----------------------------------------- ButtonHideLogPlot
 inline void REPLAY_GUI::cb_ButtonHideLogPlot_i(int val) {
+  // 作用：响应复选框操作，隐藏或显示对应的日志曲线面板。
   if(val == 0) {
     if(m_but_hide_lp->value())
       lp_viewer->showLeftLogPlot(true);
@@ -778,8 +794,10 @@ void REPLAY_GUI::cb_ButtonHideLogPlot(Fl_Widget* o, int v) {
 
 //----------------------------------------- Streaming
 inline void REPLAY_GUI::cb_Streaming_i(int val) {
+  // 作用：切换流式播放状态，并在状态改变时启动/停止计时器，保持
+  //       自动播放与界面同步。
   bool prev_stream = m_stream;
-  if(val == 0) 
+  if(val == 0)
     m_stream = false;
   else if(val == 1) 
     m_stream = true;
@@ -803,6 +821,7 @@ void REPLAY_GUI::cb_Streaming(Fl_Widget* o, int v) {
 //----------------------------------------- StreamStep
 
 inline void REPLAY_GUI::cb_StreamStep_i(int val) {
+  // 作用：记录流式播放的刷新步长（毫秒），影响自动推进的节奏。
   m_replay_disp_gap = val;
 }
 
@@ -813,6 +832,8 @@ void REPLAY_GUI::cb_StreamStep(Fl_Widget* o, int v) {
 
 //----------------------------------------- StreamSpeed
 inline void REPLAY_GUI::cb_StreamSpeed_i(bool faster) {
+  // 作用：改变回放倍率索引，并在必要时启动流式播放，保证倍率调节
+  //       对应到实际的时间推进速度。
   // First handle case where we start accelerating from a paused state
   if(faster && !m_stream) {
     m_replay_warp_ix = 3;
@@ -870,8 +891,9 @@ void REPLAY_GUI::cb_StreamSpeed(Fl_Widget* o, bool v) {
 }
 
 //----------------------------------------- updatePlayRateMsg
-void REPLAY_GUI::updatePlayRateMsg() 
+void REPLAY_GUI::updatePlayRateMsg()
 {
+  // 作用：刷新回放倍率提示，展示目标倍率与实时测得的实际倍率。
   m_replay_warp_msg = "(PAUSED)";
   if(m_stream) {
     if(m_replay_warp_ix == 0) m_replay_warp_msg = "(Time Warp = 0.125)";
@@ -940,6 +962,11 @@ void REPLAY_GUI::updateXY()
 
 //----------------------------------------------------------
 // Procedure: setDataBroker()
+//   Purpose: Receive a fully-prepared data broker, fan the data out to all
+//            sub-views, and build every menu that depends on broker content.
+//   作用：接收已经建立索引的 ALogDataBroker，依次刷新日志曲线、
+//         IPF、相遇分析等所有子菜单，并把数据上下文交给各个视图，
+//         确保界面在回放前准备就绪。
 
 void REPLAY_GUI::setDataBroker(const ALogDataBroker& broker)
 {
@@ -974,6 +1001,10 @@ void REPLAY_GUI::setDataBroker(const ALogDataBroker& broker)
 //----------------------------------------------------------
 // Procedure: setLogPlotMenus()
 //      Note: MIX short for MasterIndex
+//   Purpose: Populate the left/right log-plot menus with every numeric
+//            variable discovered in the broker.
+//   作用：遍历数据代理中所有数值型变量，为左右日志曲线菜单添加
+//         "平台/变量" 项，让用户能够快速切换要绘制的曲线。
 
 void REPLAY_GUI::setLogPlotMenus()
 {
@@ -1018,6 +1049,10 @@ void REPLAY_GUI::setBehaviorVarMap(map<string,string> map_bhv_vars)
 //----------------------------------------------------------
 // Procedure: setVarHistMenus()
 //      Note: MIX short for MasterIndex
+//   Purpose: Build menus for launching variable-history windows that can
+//            inspect numeric or string values.
+//   作用：为变量历史窗口整理出所有变量列表，并区分数值型与字
+//         符型，以便打开对应的历史图或文本视图。
 
 void REPLAY_GUI::setVarHistMenus()
 {
@@ -1052,6 +1087,9 @@ void REPLAY_GUI::setVarHistMenus()
 //----------------------------------------------------------
 // Procedure: setAppLogMenus()
 //      Note: MIX short for MasterIndex
+//   Purpose: Generate menu entries for opening application log scopes.
+//   作用：依据代理中的应用日志索引，构建打开 AppLogScope 子窗口
+//         的菜单项，支持直接查看单个任务或程序的详细日志。
 
 void REPLAY_GUI::setAppLogMenus()
 {
@@ -1074,6 +1112,10 @@ void REPLAY_GUI::setAppLogMenus()
 
 //----------------------------------------------------------
 // Procedure: setTaskDiaryMenus()
+//   Purpose: Fill the TaskDiary menu with every task log stored in the
+//            broker.
+//   作用：遍历任务日记索引，为每个任务添加菜单入口，方便用户
+//         打开 TaskDiary 窗口并对照时间轴检查事件。
 
 void REPLAY_GUI::setTaskDiaryMenus()
 {
@@ -1090,6 +1132,10 @@ void REPLAY_GUI::setTaskDiaryMenus()
 
 //----------------------------------------------------------
 // Procedure: setIPFPlotMenus()
+//   Purpose: Populate the IvP function viewer menu with behavior instances
+//            and pre-select the variables they care about.
+//   作用：列出所有行为实例，并结合行为-变量映射，方便 IPF 视图
+//         在打开时立即选中对应的调参变量。
 
 void REPLAY_GUI::setIPFPlotMenus()
 {
@@ -1111,6 +1157,10 @@ void REPLAY_GUI::setIPFPlotMenus()
 
 //----------------------------------------------------------
 // Procedure: setEncounterPlotMenus()
+//   Purpose: Offer encounter-plot menus for all available vehicle pairs
+//            derived from the broker.
+//   作用：根据代理中记录的船只组合生成相遇分析菜单，允许用户
+//         快速开启 Encounters 窗口评估避碰情况。
 
 void REPLAY_GUI::setEncounterPlotMenus()
 {
@@ -1134,6 +1184,8 @@ void REPLAY_GUI::setEncounterPlotMenus()
 // Procedure: setHelmPlotMenus()
 //   Purpose: Add the pull-down menu for selecting a vehicle and opening
 //            a Helm Report sub-gui
+//   作用：为每艘船的决策器（Helm）添加下拉菜单项，便于快速打开
+//         HelmScope 子窗口查看行为决策与执行情况。
 
 void REPLAY_GUI::setHelmPlotMenus()
 {
@@ -1190,8 +1242,12 @@ void REPLAY_GUI::initLogPlotChoiceB(string vname, string varname)
 
 //----------------------------------------------------------
 // Procedure: conditionalStep()
+//   Purpose: When streaming is enabled, advance the timeline according to
+//            the configured warp speed and elapsed real time.
+//   作用：在启用流式播放时，根据时间倍率与真实流逝时间来判定
+//         是否推进下一帧，保持回放节奏稳定。
 
-void REPLAY_GUI::conditionalStep() 
+void REPLAY_GUI::conditionalStep()
 {
   if(m_stream) {
     m_timer.stop();
@@ -1213,6 +1269,10 @@ void REPLAY_GUI::conditionalStep()
 
 //----------------------------------------------------------
 // Procedure: updateTimeSubGUI()
+//   Purpose: Update time-related widgets such as current time display and
+//            enable/disable streaming buttons based on state.
+//   作用：根据当前播放状态刷新时间显示、按钮可用性等细节元件，
+//         让用户界面即时反映内部状态。
 
 void REPLAY_GUI::updateTimeSubGUI()
 {
