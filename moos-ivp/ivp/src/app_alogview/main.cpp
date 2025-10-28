@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
   if(scanArgs(argc, argv, "-w", "-web", "--web"))
     openURLX("https://oceanai.mit.edu/ivpman/apps/alogview");
   
-  bool alog_provided = false;
+  bool log_provided = false;
 
   for(int i=1; i<argc; i++) {
     string argi = argv[i];
@@ -70,14 +70,14 @@ int main(int argc, char *argv[])
       help_message();
       return(0);
     }
-    else if(strEnds(argi, ".alog"))
-      alog_provided = true;
+    else if(strEnds(argi, ".alog") || strEnds(argi, ".sqlite"))
+      log_provided = true;
     else if((argi == "-vb") || (argi == "--verbose"))
       launcher.setVerbose();
   }
   
-  if(!alog_provided) {
-    cout << "No alog file given - exiting" << endl;
+  if(!log_provided) {
+    cout << "No log file (.alog/.sqlite) given - exiting" << endl;
     return(1);
   }
     
@@ -99,10 +99,11 @@ int main(int argc, char *argv[])
 void help_message()
 {
   cout << "Usage:                                                        " << endl;
-  cout << "  alogview file.alog [another_file.alog] [OPTIONS]            " << endl;
+  cout << "  alogview file.alog|file.sqlite "
+       << "[another_file.alog|file.sqlite] [OPTIONS]            " << endl;
   cout << "                                                              " << endl;
   cout << "Synopsis:                                                     " << endl;
-  cout << "  Renders vehicle paths from multiple MOOS .alog files. Replay" << endl;
+  cout << "  Renders vehicle paths from multiple MOOS .alog/.sqlite files." << endl;
   cout << "  logged data or step through manually. Supports several      " << endl;
   cout << "  specialized pop-up windows for viewing helm state, objective" << endl;
   cout << "  functions, any logged variable across vehicles. If multiple " << endl;
@@ -111,7 +112,7 @@ void help_message()
   cout << "  to cache data base on the MOOS variable name.               " << endl;
   cout << "                                                              " << endl;
   cout << "Standard Arguments:                                           " << endl;
-  cout << "  file.alog - The input logfile.                              " << endl;
+  cout << "  file.alog | file.sqlite - The input logfile.                " << endl;
   cout << "                                                              " << endl;
   cout << "Options:                                                      " << endl;
   cout << "  -h,--help       Displays this help message                  " << endl;
@@ -184,7 +185,7 @@ void help_message()
   cout << "             https://oceanai.mit.edu/ivpman/apps/alogview     " << endl;
   cout << "                                                              " << endl;
   cout << "Further Notes:                                                " << endl;
-  cout << "  (1) Multiple .alog files ok - typically one per vehicle     " << endl;
+  cout << "  (1) Multiple .alog/.sqlite files ok - typically one per vehicle" << endl;
   cout << "  (2) See also: alogscan, alogrm, alogclip, aloggrep          " << endl;
   cout << "      alogsort, alogiter, aloghelm                            " << endl;
   cout << "  (3) Config params may also be read from .alogview hidden    " << endl;
