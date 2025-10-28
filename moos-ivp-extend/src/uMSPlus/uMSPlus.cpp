@@ -27,7 +27,7 @@
 //   02111-1307, USA. 
 //
 //////////////////////////    END_GPL    //////////////////////////////////
-// uMS.cpp : Defines the entry point for the console application.
+// uMSPlus.cpp : Defines the entry point for the console application.
 
 // Paul Newman 2005
 
@@ -77,7 +77,7 @@ void OnSave(Fl_Widget* pWidget,void * pParam)
     }
     
     //here we try to load previous preferences
-    Fl_Preferences app( Fl_Preferences::USER, "MOOS", "uMS" );
+    Fl_Preferences app( Fl_Preferences::USER, "MOOS", "uMSPlus" );
     app.set("Communities",os.str().c_str());
 }
 
@@ -140,14 +140,14 @@ int main(int argc, char* argv[])
 {
     
     //make the frame
-    Fl_Double_Window *w = new Fl_Double_Window( 820, 460, "uMS" );
+    Fl_Double_Window *w = new Fl_Double_Window( 820, 460, "uMSPlus" );
     w->size_range(DEFAULT_WIDTH,DEFAULT_HEIGHT);
     
     //OK - lets build a whole set of panes
     std::string sWho;
     {
         //note scoping
-        Fl_Preferences app( Fl_Preferences::USER, "MOOS", "uMS" );
+        Fl_Preferences app( Fl_Preferences::USER, "MOOS", "uMSPlus" );
         char Space[2048];
         app.get("Communities",Space,"Unnamed:9000@LOCALHOST",sizeof(Space));
         sWho = std::string(Space);

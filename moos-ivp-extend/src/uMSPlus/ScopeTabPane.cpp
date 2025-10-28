@@ -252,7 +252,7 @@ void CScopeTabPane::OnControlWidget(Fl_Widget* pWidget,int ID)
         break;
     case ID_CONNECT:
         {
-            std::string sMOOSName = "uMS["+m_Comms.GetLocalIPAddress()+"]";
+            std::string sMOOSName = "uMSPlus["+m_Comms.GetLocalIPAddress()+"]";
             m_sHost = std::string(m_pDBHostInput->value());
             m_lPort = atoi(m_pDBPortInput->value());
             //set up callbacks
