@@ -23,6 +23,7 @@
 ## 升级记录 · Upgrade Journal
 | 日期 Date | 版本 Version | 变更说明 Change Notes |
 | --- | --- | --- |
+| 2025-03-10 | v1.1 | 将回放输入从 `.alog` 日志切换为 `.sqlite` 数据库文件，保持既有回放、联动等功能无缝运行。Switched replay input from `.alog` logs to `.sqlite` databases while keeping all existing capabilities intact. |
 | 2025-03-09 | v1.0 | 初始文档，概述 uReplay 功能、逻辑与流程。Initial document covering uReplay features, logic, and flow. |
 
 > 后续若有新功能、界面或数据流程改动，请在上表追加条目并更新相关章节描述。

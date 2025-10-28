@@ -144,10 +144,10 @@ bool LogViewLauncher::parseCommandArgs(int argc, char **argv)
     }
   }
 
-  // Part 4: Handle the alog files last
+  // Part 4: Handle the log files last
   for(int i=1; i<argc; i++) {
     string argi = argv[i];
-    if(strEnds(argi, ".alog")) 
+    if(strEnds(argi, ".alog") || strEnds(argi, ".sqlite"))
       m_dbroker.addALogFile(argi);
   }
 
@@ -165,7 +165,7 @@ bool LogViewLauncher::handleConfigParam(string argi)
     cout << "Handling Config Params: [" << argi << "]" << endl;
 
   bool handled = true;
-  if(strEnds(argi, ".alog")) 
+  if(strEnds(argi, ".alog") || strEnds(argi, ".sqlite"))
     handled = true; // handled separately
   else if(strBegins(argi, "--max_fptrs=")) 
     handled = handleMaxFilePtrs(argi.substr(12));
@@ -286,8 +286,8 @@ bool LogViewLauncher::sanityCheck()
 bool LogViewLauncher::configDataBroker()
 {
   cout << "*********************************************************" << endl;
-  cout << "* STARTUP PART 1: Build/Confirm data cache files        *" << endl; 
-  cout << "* The first time alogview launches on new alog file(s)  *" << endl;
+  cout << "* STARTUP PART 1: Build/Confirm data cache files        *" << endl;
+  cout << "* The first time alogview launches on new log file(s)   *" << endl;
   cout << "* this may take more time as a data cache is created by *" << endl;
   cout << "* creating a dedicated file for each logged variable.   *" << endl;
   cout << "* Subsequent re-launches on the same data will be fast. *" << endl;
