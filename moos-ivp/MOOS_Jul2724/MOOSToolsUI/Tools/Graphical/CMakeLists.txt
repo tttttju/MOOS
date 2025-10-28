@@ -3,7 +3,11 @@
 #Build MOOScope
 SET(BUILD_UMS ON CACHE BOOL "Build MOOSScope (uMS)?")
 IF(BUILD_UMS)
-    SET(GRAPHICAL_DIRS ${GRAPHICAL_DIRS}  uMS)
+    IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/uMS")
+        SET(GRAPHICAL_DIRS ${GRAPHICAL_DIRS}  uMS)
+    ELSE()
+        MESSAGE(STATUS "uMS source directory not found - skipping build")
+    ENDIF()
 ENDIF(BUILD_UMS)
 
 

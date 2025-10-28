@@ -22,6 +22,7 @@ INCLUDE_DIRECTORIES(lib_common_utils/include)
 #============================================================================
 
 ADD_SUBDIRECTORY(uReplay)
+ADD_SUBDIRECTORY(uMSPlus)
 
 
 ##############################################################################
