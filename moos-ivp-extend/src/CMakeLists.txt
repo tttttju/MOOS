@@ -21,7 +21,7 @@ INCLUDE_DIRECTORIES(lib_common_utils/include)
 # List the subdirectories to build...
 #============================================================================
 
-ADD_SUBDIRECTORY(module_name)
+ADD_SUBDIRECTORY(uReplay)
 
 
 ##############################################################################

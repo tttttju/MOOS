@@ -1,5 +1,9 @@
 # uReplay 功能说明与升级记录
 
+## 代码位置 · Source Location
+- **入口程序 / Entry Point**：`moos-ivp-extend/src/uReplay/uReplayMain.cpp` 在 `moos-ivp-extend` 树中提供二进制入口，复用 `LogViewLauncher` 逻辑并保持与 `alogview` 一致的回放流程体验。【F:moos-ivp-extend/src/uReplay/uReplayMain.cpp†L1-L99】
+- **构建配置 / Build Wiring**：`moos-ivp-extend/src/uReplay/CMakeLists.txt` 将 `alogview` 相关的 GUI 源文件（`REPLAY_GUI.cpp`、`NavPlotViewer.cpp` 等）从基础 `moos-ivp` 树中拉入编译，并补齐 `FLTK`、`marineview` 等依赖以生成 `uReplay` 可执行文件。【F:moos-ivp-extend/src/uReplay/CMakeLists.txt†L1-L45】
+
 ## 功能概览 · Functional Highlights
 - **回放控制 / Replay Control**：菜单项与快捷键可切换流式回放、调节步进间隔，并支持按时间跳转或步进浏览历史数据，涵盖暂停、快进、快退等操作。【F:moos-ivp/ivp/src/app_alogview/REPLAY_GUI.cpp†L189-L214】【F:moos-ivp/ivp/src/app_alogview/REPLAY_GUI.cpp†L298-L359】
 - **时间倍率管理 / Time-Warp Management**：在流式模式下可通过加减速调整播放倍率，并实时计算实际执行倍率以提示用户回放是否滞后。【F:moos-ivp/ivp/src/app_alogview/REPLAY_GUI.cpp†L814-L900】
