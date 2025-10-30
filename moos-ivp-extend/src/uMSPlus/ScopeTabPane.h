@@ -57,6 +57,7 @@
 #include <FL/Fl_Check_Browser.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Menu_Window.H>
 #include <FL/Fl_Int_Input.H>
 #include "MOOS/libFLTKVW/MOOSFLTKUI.h"
 #include "ScopeGrid.h"
@@ -107,14 +108,19 @@ private:
     typedef CMOOSFLTKUI BASE;
     enum UI_IDS
     {
+        ID_SEARCH,
         ID_PROCESS,
         ID_CONNECT,
         ID_SHOW_PENDING,
     };
 
+    class SearchAutoCompleteInput;
+    class SearchSuggestionWindow;
+
     Fl_Button *m_pConnectButton;
     Fl_Input *m_pDBHostInput;
     Fl_Int_Input *m_pDBPortInput;
+    SearchAutoCompleteInput* m_pSearchInput;
     CScopeGrid * m_pScopeGrid;
     Fl_Check_Browser *m_pProcessList;
     //Fl_Hold_Browser *m_pProcessList;
@@ -140,11 +146,19 @@ protected:
     void OnTimer();
     bool GetDBSummary();
     bool GetDBProcSummary();
+    void HandleSearchAutocomplete();
+    void ResetSearchAutocompleteState();
+    void ShowSearchSuggestions(const std::vector<std::string>& suggestions);
+    void HideSearchSuggestions();
 
     std::string m_sHost;
     long m_lPort;
     CMOOSCommClient m_Comms;
     CDBImage m_DBImage;
+
+    std::string m_LastAutocompletePrefix;
+    std::vector<std::string> m_AutocompleteCandidates;
+    SearchSuggestionWindow* m_pSearchSuggestionWindow;
 
     bool FetchLoop();
     CMOOSThread m_FetchThread;

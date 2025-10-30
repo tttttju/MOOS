@@ -170,8 +170,11 @@ CScopeGrid::CScopeGrid( int X, int Y, int W, int H, const char *l ) :        Flv
     m_pDBImage = NULL;
     m_nCount = 0;
     m_pComms = NULL;
+    m_FilterDirty = true;
+    m_FilterText.clear();
+    m_FilteredRows.clear();
     //default size
-    rows(500);
+    rows(0);
     cols(7);
     feature(FLVF_HEADERS|FLVF_DIVIDERS|FLVF_MULTI_SELECT|FLVF_FULL_RESIZE);
     feature_remove(FLVF_MULTI_SELECT | FLVF_COL_HEADER  );
@@ -217,12 +220,98 @@ void CScopeGrid::SetTitle(std::string sTitle)
 }
 
 
+void CScopeGrid::SetFilter(const std::string& sFilter)
+{
+    std::string sNormalised = sFilter;
+    MOOSToUpper(sNormalised);
+
+    if(sNormalised != m_FilterText)
+    {
+        m_FilterText = sNormalised;
+    }
+
+    m_FilterDirty = true;
+    redraw();
+}
+
+
+int CScopeGrid::MapRowToIndex(int displayRow) const
+{
+    if(displayRow < 0)
+        return displayRow;
+
+    if(m_FilterText.empty())
+        return displayRow;
+
+    if(displayRow < (int)m_FilteredRows.size())
+        return m_FilteredRows[displayRow];
+
+    return -1;
+}
+
+
+void CScopeGrid::RebuildFilter()
+{
+    if(!m_FilterDirty)
+        return;
+
+    m_FilteredRows.clear();
+
+    if(m_pDBImage==NULL)
+    {
+        rows(0);
+        m_FilterDirty = false;
+        return;
+    }
+
+    int nVars = m_pDBImage->GetNumVariables();
+
+    if(m_FilterText.empty())
+    {
+        rows(nVars);
+    }
+    else
+    {
+        for(int i = 0; i < nVars; ++i)
+        {
+            CDBImage::CVar Var;
+            if(m_pDBImage->Get(Var,i))
+            {
+                std::string sName = Var.GetName();
+                MOOSToUpper(sName);
+                if(sName.find(m_FilterText) != std::string::npos)
+                {
+                    m_FilteredRows.push_back(i);
+                }
+            }
+        }
+        rows((int)m_FilteredRows.size());
+    }
+
+    if(m_FilterText.empty())
+    {
+        m_FilteredRows.clear();
+    }
+
+    m_FilterDirty = false;
+}
+
+
 std::string CScopeGrid::GetDataValue(int R,int C)
 {
+    if(m_FilterDirty)
+    {
+        RebuildFilter();
+    }
+
+    int index = MapRowToIndex(R);
+    if(index < 0)
+        return "";
+
     CDBImage::CVar Var;
     if(m_pDBImage!=NULL)
     {
-        if(m_pDBImage->Get(Var,R))
+        if(m_pDBImage->Get(Var,index))
         {
             switch(C)
             {
@@ -298,6 +387,7 @@ void CScopeGrid::OnGridCallBack()
         //this is a double click
         int c = select_start_col();
         int r = select_start_row();
+        int actualRow = MapRowToIndex(r);
         std::string sVal = GetDataValue(r,c);
 
         if(c==6)
@@ -313,7 +403,7 @@ void CScopeGrid::OnGridCallBack()
                 if((Fl::event_key(FL_Control_L)||Fl::event_key(FL_Control_R)))
                 {
                     CDBImage::CVar Var;
-                    if(m_pDBImage->Get(Var,r))
+                    if(actualRow>=0 && m_pDBImage->Get(Var,actualRow))
                     {
                         PokeMOOS(Var,false);
                     }
@@ -333,6 +423,9 @@ void CScopeGrid::OnGridCallBack()
 
 void CScopeGrid::redraw()
 {
+    m_FilterDirty = true;
+    RebuildFilter();
+
     int c = select_start_col();
     int r = select_start_row();
     if(c==6)
@@ -402,7 +495,8 @@ void CScopeGrid::get_style( Flv_Style &s, int R, int C )
     {
         s.background( (Fl_Color)(FL_GRAY_RAMP+22) );
     }
-    if(C==6 && m_pDBImage->HasChanged(R))
+    int actualRow = MapRowToIndex(R);
+    if(C==6 && actualRow>=0 && m_pDBImage->HasChanged(actualRow))
     {
         s.foreground( (Fl_Color)(FL_RED) );
     }
@@ -446,4 +540,5 @@ int CScopeGrid::col_width( int C )
 void CScopeGrid::SetDBImage(CDBImage *pDBImage)
 {
     m_pDBImage = pDBImage;
+    m_FilterDirty = true;
 }
