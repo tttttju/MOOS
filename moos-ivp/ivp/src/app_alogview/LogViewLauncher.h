@@ -33,8 +33,11 @@ class LogViewLauncher
  public:
   LogViewLauncher();
   virtual ~LogViewLauncher() {}
-  
+
   REPLAY_GUI *launch(int argc, char **argv);
+
+  void setExtraLogs(const std::vector<std::string>& logs)
+  {m_extra_logs = logs;}
 
   void setVerbose() {m_verbose=true; m_dbroker.setVerbose();}
   
@@ -100,8 +103,10 @@ protected:
 
   std::vector<std::string> m_gui_params;
   std::vector<std::string> m_gui_values;
-  
+
   REPLAY_GUI *m_gui;
+
+  std::vector<std::string> m_extra_logs;
 };
 
 #endif 
