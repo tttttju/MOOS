@@ -80,6 +80,12 @@ REPLAY_GUI *LogViewLauncher::launch(int argc, char **argv)
   cout << termColor();
   
   ok = ok && parseCommandArgs(argc, argv);
+
+  if(m_dbroker.sizeALogs() == 0 && !m_extra_logs.empty()) {
+    for(unsigned int i=0; i<m_extra_logs.size(); ++i)
+      m_dbroker.addALogFile(m_extra_logs[i]);
+  }
+
   ok = ok && sanityCheck();
   ok = ok && configDataBroker();
   ok = ok && configRegionInfo();

@@ -26,16 +26,23 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <string>
+#include <algorithm>
 #include "REPLAY_GUI.h"
 #include "MBUtils.h"
 #include "OpenURL.h"
 #include "ReleaseInfo.h"
 #include "LogViewLauncher.h"
+#include <FL/Fl_File_Chooser.H>
+#include <dirent.h>
+#include <sys/stat.h>
 
 using namespace std;
 
 void help_message();
 void idleProc(void*);
+std::vector<std::string> collectSqliteFiles(const std::string& dirpath);
+std::string promptForSqliteDirectory();
 
 REPLAY_GUI* gui = 0;
 
@@ -61,6 +68,7 @@ int main(int argc, char *argv[])
     openURLX("https://oceanai.mit.edu/ivpman/apps/alogview");
 
   bool log_provided = false;
+  std::vector<std::string> manual_logs;
 
   for(int i=1; i<argc; i++) {
     string argi = argv[i];
@@ -79,8 +87,19 @@ int main(int argc, char *argv[])
   }
 
   if(!log_provided) {
-    cout << "No log file given - exiting" << endl;
-    return(1);
+    string chosen_dir = promptForSqliteDirectory();
+    if(chosen_dir == "") {
+      cout << "No log file given - exiting" << endl;
+      return(1);
+    }
+    manual_logs = collectSqliteFiles(chosen_dir);
+    if(manual_logs.empty()) {
+      cout << "No .sqlite files found in directory - exiting" << endl;
+      return(1);
+    }
+    for(unsigned int i=0; i<manual_logs.size(); ++i)
+      cout << "Adding log file: " << manual_logs[i] << endl;
+    launcher.setExtraLogs(manual_logs);
   }
 
   gui = launcher.launch(argc, argv);
@@ -125,5 +144,53 @@ void help_message()
   cout << "Further Notes:                                                " << endl;
   cout << "  (1) Multiple log files are synchronized on replay.          " << endl;
   cout << "  (2) Configuration mirrors alogview. See docs/uReplay.md.    " << endl;
+  cout << "  (3) Without an input file, select a directory of .sqlite    " << endl;
+  cout << "      logs when prompted to auto-load them.                   " << endl;
   cout << endl;
+}
+
+//--------------------------------------------------------
+// Procedure: promptForSqliteDirectory()
+
+string promptForSqliteDirectory()
+{
+  const char* result = fl_dir_chooser("Select directory with sqlite logs", ".", 0);
+  if(!result)
+    return("");
+  return(std::string(result));
+}
+
+//--------------------------------------------------------
+// Procedure: collectSqliteFiles()
+
+vector<string> collectSqliteFiles(const string& dirpath)
+{
+  vector<string> results;
+  if(dirpath == "")
+    return(results);
+
+  DIR* dir = opendir(dirpath.c_str());
+  if(!dir)
+    return(results);
+
+  struct dirent* entry = nullptr;
+  string base = dirpath;
+  if((base.size() > 0) && (base[base.size()-1] != '/'))
+    base += "/";
+
+  while((entry = readdir(dir)) != nullptr) {
+    string name = entry->d_name;
+    if((name == ".") || (name == ".."))
+      continue;
+    string fullpath = base + name;
+    struct stat info;
+    if(stat(fullpath.c_str(), &info) != 0)
+      continue;
+    if(S_ISREG(info.st_mode) && strEnds(name, ".sqlite"))
+      results.push_back(fullpath);
+  }
+
+  closedir(dir);
+  std::sort(results.begin(), results.end());
+  return(results);
 }
