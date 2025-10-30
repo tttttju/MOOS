@@ -39,6 +39,7 @@
 
 #include <string>
 #include <cstring>
+#include <vector>
 #include <FL/fl_draw.H>
 #include "MOOS/libFLTKVW/Flv_Table.H"
 #include <FL/Fl_Menu_Window.H>
@@ -89,6 +90,8 @@ public:
     void SetDBImage(CDBImage * pDBImage);
     void SetComms(CMOOSCommClient* pComms){m_pComms = pComms;};
     void SetTitle(std::string sTitle);
+    void SetFilter(const std::string& sFilter);
+    int MapRowToIndex(int displayRow) const;
 
     static void GridCallback(CScopeGrid *pMe, void * )
     {
@@ -104,6 +107,7 @@ public:
     int m_nCount;
 
 protected:
+    void RebuildFilter();
     std::string GetDataValue(int R,int C);
     bool PokeMOOS(CDBImage::CVar & Var, bool bNew);
     CTipWindow * m_pTW;
@@ -114,6 +118,9 @@ protected:
 
 private :
     typedef Flv_Table BASE ;
+    std::string m_FilterText;
+    std::vector<int> m_FilteredRows;
+    bool m_FilterDirty;
 };
 
 #endif // !defined(AFX_SCOPEGRID_H__E91D0ABA_84EC_4E7A_8AA8_FCC45E216208__INCLUDED_)
